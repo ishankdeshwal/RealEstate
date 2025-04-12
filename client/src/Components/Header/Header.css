@@ -1,0 +1,31 @@
+.menu-icon {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .menu-icon {
+        display: block;
+    }
+}
+
+/* Fix for navigation links */
+.nav-link {
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+}
+
+/* Ensure menu items are clickable */
+.menu-items {
+    position: relative;
+    z-index: 100;
+}
+
+/* Fix for desktop navigation */
+@media (min-width: 769px) {
+    .desktop-nav {
+        position: relative;
+        z-index: 100;
+        pointer-events: auto;
+    }
+}
