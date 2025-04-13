@@ -14,8 +14,7 @@ import UserDetailContext from "../../Context/UserDetailsContext";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../Components/Heart/Heart";
-import UseAuthCheck from "../../hooks/useAuthCheck";
-
+import useAuthCheck from "../../hooks/useAuthCheck.jsx";
 function Property() {
   const {
     userDetails: { token, bookings = [] },
@@ -26,7 +25,7 @@ function Property() {
   const id = pathname.split("/").slice(-1)[0];
   const { user } = useAuth0();
   const [modalOpened, setModalOpened] = useState(false);
-  const { validateLogin } = UseAuthCheck();
+  const { validateLogin } = useAuthCheck();
   const [isBooked, setIsBooked] = useState(false);
   const [bookingDate, setBookingDate] = useState(null);
 
