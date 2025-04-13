@@ -2,14 +2,15 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "npx prisma generate"
-  },
-  "author": "",
-  "license": "ISC",
   "type": "module",
   "description": "",
+  "scripts": {
+  "build": "echo \"No build step needed\"",
+  "dev": "nodemon index.js",
+  "postinstall": "npx prisma generate"
+},
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "cookie-parser": "^1.4.7",
@@ -19,9 +20,7 @@
     "express-async-handler": "^1.2.0",
     "express-oauth2-jwt-bearer": "^1.6.1",
     "mongodb": "^6.15.0",
-    "nodemon": "^3.1.9"
-  },
-  "devDependencies": {
+    "nodemon": "^3.1.9",
     "prisma": "^6.6.0"
   }
 }
