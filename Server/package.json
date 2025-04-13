@@ -5,10 +5,10 @@
   "type": "module",
   "description": "",
   "scripts": {
-  "build": "echo \"No build step needed\"",
-  "dev": "nodemon index.js",
-  "postinstall": "npx prisma generate"
-},
+    "build": "echo \"No build step needed\"",
+    "dev": "nodemon index.js",
+    "postinstall": "bunx prisma generate"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
