@@ -4,12 +4,12 @@ import { AiFillHeart } from 'react-icons/ai'
 import UserDetailContext from '../../Context/UserDetailsContext'
 import { toFav } from '../../utils/Api'
 import { checkFavourites, updateFavourites } from '../../utils/Common'
-import UseAuthCheck from '../../hooks/useAuthCheck'
+import useAuthCheck from '../../Hooks/UseAuthCheck'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function Heart({id}) {
   const [heartColor,setHeartColor]=useState("white")
-  const{validateLogin}=UseAuthCheck()
+  const{validateLogin}=useAuthCheck()
   const{user}=useAuth0()
 
   const{

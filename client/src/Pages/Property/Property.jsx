@@ -14,7 +14,8 @@ import UserDetailContext from "../../Context/UserDetailsContext";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../Components/Heart/Heart";
-import useAuthCheck from "../../hooks/useAuthCheck.jsx";
+import useAuthCheck from "../../Hooks/UseAuthCheck";
+
 function Property() {
   const {
     userDetails: { token, bookings = [] },
