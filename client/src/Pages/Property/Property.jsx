@@ -7,7 +7,6 @@ import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
 import { FaShower } from "react-icons/fa";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import { useAuth0 } from "@auth0/auth0-react";
-import useAuthCheck from "../../hooks/useAuthCheck";
 import "./Property.css";
 import Map from "../../Components/Map/Map";
 import BookingModel from "../../Components/BookingModel/BookingModel";
@@ -15,6 +14,7 @@ import UserDetailContext from "../../Context/UserDetailsContext";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../Components/Heart/Heart";
+import UseAuthCheck from "../../hooks/useAuthCheck";
 
 function Property() {
   const {
@@ -26,7 +26,7 @@ function Property() {
   const id = pathname.split("/").slice(-1)[0];
   const { user } = useAuth0();
   const [modalOpened, setModalOpened] = useState(false);
-  const { validateLogin } = useAuthCheck();
+  const { validateLogin } = UseAuthCheck();
   const [isBooked, setIsBooked] = useState(false);
   const [bookingDate, setBookingDate] = useState(null);
 
