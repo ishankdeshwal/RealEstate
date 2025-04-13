@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "prisma generate"
+    "generate": "npx prisma generate"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +19,9 @@
     "express-async-handler": "^1.2.0",
     "express-oauth2-jwt-bearer": "^1.6.1",
     "mongodb": "^6.15.0",
-    "nodemon": "^3.1.9",
-    "prisma": "^6.5.0"
+    "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "prisma": "^6.6.0"
   }
 }
