@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render(
   domain="dev-c36q3wiqqre4xdtr.us.auth0.com"
   clientId="2OVJ5t85LXV7QwIlPGxpGN7WdfNHeDSe"
   authorizationParams={{
-    redirect_uri: "https://realestate-backend-server.onrender.com",
+    redirect_uri: "https://realestate-frontend-7td2.onrender.com",
     audience: "https://localhost:8000",
     scope: "openid profile email offline_access"
   }}
