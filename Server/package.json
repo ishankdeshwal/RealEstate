@@ -5,8 +5,9 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "build": "echo \"No build step needed\"",
+    "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "echo \"No build step needed\"",
     "postinstall": "bunx prisma generate"
   },
   "author": "",
