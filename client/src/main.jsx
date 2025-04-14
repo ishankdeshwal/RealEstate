@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')).render(
   advancedOptions={{
     defaultScope: "openid profile email offline_access"
   }}
-  skipRedirectCallback={window.location.pathname === '/callback'}
+  
 >
 
      <MantineProvider withGlobalStyles withNormalizeCSS>
