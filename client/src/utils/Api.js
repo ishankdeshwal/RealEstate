@@ -115,7 +115,9 @@ export const getAllFav = async (email, token) => {
     }
 
     try {
-        const res = await api.post('/user/allFav',
+        // First try with POST request
+        const res = await api.post(
+            '/user/allFav',
             { email }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -127,11 +129,41 @@ export const getAllFav = async (email, token) => {
             return res.data;
         } else if (Array.isArray(res.data)) {
             return { favResidenciesiD: res.data };
+        } else if (res.data && typeof res.data === 'object') {
+            return { favResidenciesiD: [] };
         } else {
             return { favResidenciesiD: [] };
         }
     } catch (error) {
-        toast.error("Something went wrong while fetching favourites");
+        console.error("Error fetching favorites:", error);
+        
+        // If POST fails, try with GET request as fallback
+        if (error.response?.status === 404 || error.response?.status === 405) {
+            try {
+                const fallbackRes = await api.get(
+                    `/user/allFav?email=${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                
+                if (fallbackRes.data && Array.isArray(fallbackRes.data.favResidenciesiD)) {
+                    return fallbackRes.data;
+                } else if (Array.isArray(fallbackRes.data)) {
+                    return { favResidenciesiD: fallbackRes.data };
+                }
+            } catch (fallbackError) {
+                console.error("Fallback request also failed:", fallbackError);
+            }
+        }
+        
+        if (error.response?.status === 404) {
+            toast.error("User not found. Please try logging in again.");
+        } else {
+            toast.error("Something went wrong while fetching favorites");
+        }
         return { favResidenciesiD: [] };
     }
 }
@@ -141,6 +173,7 @@ export const getAllBookings = async (email, token) => {
     }
     
     try {
+        // First try with POST request
         const res = await api.post(
             `/user/getAllVisits`,
             { email }, {
@@ -160,6 +193,30 @@ export const getAllBookings = async (email, token) => {
             return { bookedVisits: [] };
         }
     } catch (error) {
+        console.error("Error fetching bookings:", error);
+        
+        // If POST fails, try with GET request as fallback
+        if (error.response?.status === 404 || error.response?.status === 405) {
+            try {
+                const fallbackRes = await api.get(
+                    `/user/getAllVisits?email=${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                
+                if (fallbackRes.data && Array.isArray(fallbackRes.data.bookedVisits)) {
+                    return fallbackRes.data;
+                } else if (Array.isArray(fallbackRes.data)) {
+                    return { bookedVisits: fallbackRes.data };
+                }
+            } catch (fallbackError) {
+                console.error("Fallback request also failed:", fallbackError);
+            }
+        }
+        
         if (error.response?.status === 404) {
             toast.error("User not found. Please try logging in again.");
         } else {
