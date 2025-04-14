@@ -5,6 +5,21 @@ import {toast} from 'react-toastify'
 export const api=axios.create({
     baseURL:"https://real-estate-t82o.vercel.app/api"
 })
+
+// Add a request interceptor to include the token in all requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const getAllProperties=async()=>{
     try{
         const res=await api.get("/residency/all")

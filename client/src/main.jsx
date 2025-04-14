@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render(
   domain="dev-c36q3wiqqre4xdtr.us.auth0.com"
   clientId="2OVJ5t85LXV7QwIlPGxpGN7WdfNHeDSe"
   authorizationParams={{
-    redirect_uri: "https://real-estate-njaf-client.vercel.app",
+    redirect_uri: redirectUri,
     audience: "https://real-estate-t82o.vercel.app",
     scope: "openid profile email offline_access"
   }}
@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')).render(
   advancedOptions={{
     defaultScope: "openid profile email offline_access"
   }}
-  
+  skipRedirectCallback={window.location.pathname === '/callback'}
 >
 
      <MantineProvider withGlobalStyles withNormalizeCSS>
