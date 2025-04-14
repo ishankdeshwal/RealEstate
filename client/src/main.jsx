@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
   clientId="2OVJ5t85LXV7QwIlPGxpGN7WdfNHeDSe"
   authorizationParams={{
     redirect_uri: "https://real-estate-njaf-client.vercel.app",
-    audience: "https://localhost:8000",
+    audience: "https://real-estate-t82o.vercel.app",
     scope: "openid profile email offline_access"
   }}
   cacheLocation="localstorage"
