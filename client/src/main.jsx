@@ -14,8 +14,8 @@ createRoot(document.getElementById('root')).render(
   domain="dev-c36q3wiqqre4xdtr.us.auth0.com"
   clientId="2OVJ5t85LXV7QwIlPGxpGN7WdfNHeDSe"
   authorizationParams={{
-    redirect_uri: "https://realestate-frontend-7td2.onrender.com",
-    audience: "https://realestate-backend-server.onrender.com",
+    redirect_uri: "https://real-estate-e6s7-client.vercel.app",
+    audience: "https://localhost:8000",
     scope: "openid profile email offline_access"
   }}
   cacheLocation="localstorage"
