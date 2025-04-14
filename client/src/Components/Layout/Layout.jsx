@@ -39,7 +39,7 @@ function Layout() {
         
         const res = await getAccessTokenSilently({
           authorizationParams: {
-            audience: "http://localhost:8000",
+            audience: "https://real-estate-t82o.vercel.app",
             scope: "openid profile email offline_access",
           }
         });
