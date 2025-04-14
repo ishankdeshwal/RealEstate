@@ -40,11 +40,13 @@ function Footer() {
                     >
                       About Us
                     </span>
-                    <span 
-                      className="cursor-pointer hover:text-blue-500 transition-colors"
-                      onClick={() => handleNavigation('/contact')}
-                    >
-                      Contact Us
+                    <span>
+                       <a
+            href="mailto:deshwalishank@gmail.com"
+            className="text-center py-1 hover:text-blue-500 transition-colors cursor-pointer nav-link"
+          >
+            Contact Us
+          </a>
                     </span>
                 </div>
             </div>
