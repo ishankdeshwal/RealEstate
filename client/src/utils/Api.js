@@ -52,7 +52,7 @@ export const getAllProperties=async()=>{
 }
 export const getProperty=async(id)=>{
 try {
-    const res=await api.get(`/residency//${id}`,
+    const res=await api.get(`/residency/${id}`,
         {timeout:10*1000})
     if(res.status===400 || res.status===500){
         throw res.data
