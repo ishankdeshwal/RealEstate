@@ -31,11 +31,8 @@ function Layout() {
       try {
         setTokenFetchAttempted(true);
         
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) {
-          setUserDetails((prev) => ({ ...prev, token: storedToken }));
-          return;
-        }
+        // Clear any existing token to force a fresh token fetch
+        localStorage.removeItem("token");
         
         const res = await getAccessTokenSilently({
           authorizationParams: {
@@ -45,6 +42,7 @@ function Layout() {
         });
         
         if (res) {
+          console.log("Token fetched successfully:", res.substring(0, 10) + "...");
           localStorage.setItem("token", res);
           setUserDetails((prev) => ({ ...prev, token: res }));
           mutate(res);
@@ -68,6 +66,31 @@ function Layout() {
       getTokenAndRegister();
     }
   }, [isAuthenticated, isLoading, userDetails?.token, getAccessTokenSilently, mutate, tokenFetchAttempted, loginWithRedirect]);
+
+  // Force token refresh on component mount if user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const refreshToken = async () => {
+        try {
+          const token = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: "https://real-estate-t82o.vercel.app",
+              scope: "openid profile email offline_access",
+            }
+          });
+          
+          if (token) {
+            localStorage.setItem("token", token);
+            setUserDetails((prev) => ({ ...prev, token }));
+          }
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+        }
+      };
+      
+      refreshToken();
+    }
+  }, [isAuthenticated, user, getAccessTokenSilently, setUserDetails]);
 
   const { data: favData } = UseFavourites();
 

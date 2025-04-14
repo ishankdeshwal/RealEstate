@@ -12,10 +12,29 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log("Adding token to request:", token.substring(0, 10) + "...");
+    } else {
+      console.warn("No token found in localStorage");
     }
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor to handle 401 errors
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.error("Unauthorized request:", error.config.url);
+      toast.error("Authentication error. Please try logging in again.");
+      // Clear the token to force a new login
+      localStorage.removeItem("token");
+    }
     return Promise.reject(error);
   }
 );
@@ -111,10 +130,12 @@ export const toFav=async(id,email,token)=>{
 }
 export const getAllFav = async (email, token) => {
     if (!token) {
+        console.warn("No token provided to getAllFav");
         return { favResidenciesiD: [] };
     }
 
     try {
+        console.log("Fetching favorites for:", email);
         // First try with POST request
         const res = await api.post(
             '/user/allFav',
@@ -124,6 +145,8 @@ export const getAllFav = async (email, token) => {
                 }
             }
         );
+        
+        console.log("Favorites response:", res.data);
         
         if (res.data && Array.isArray(res.data.favResidenciesiD)) {
             return res.data;
@@ -140,6 +163,7 @@ export const getAllFav = async (email, token) => {
         // If POST fails, try with GET request as fallback
         if (error.response?.status === 404 || error.response?.status === 405) {
             try {
+                console.log("Trying GET request as fallback");
                 const fallbackRes = await api.get(
                     `/user/allFav?email=${encodeURIComponent(email)}`,
                     {
@@ -148,6 +172,8 @@ export const getAllFav = async (email, token) => {
                         }
                     }
                 );
+                
+                console.log("Fallback response:", fallbackRes.data);
                 
                 if (fallbackRes.data && Array.isArray(fallbackRes.data.favResidenciesiD)) {
                     return fallbackRes.data;
@@ -169,10 +195,12 @@ export const getAllFav = async (email, token) => {
 }
 export const getAllBookings = async (email, token) => {
     if (!token) {
+        console.warn("No token provided to getAllBookings");
         return { bookedVisits: [] };
     }
     
     try {
+        console.log("Fetching bookings for:", email);
         // First try with POST request
         const res = await api.post(
             `/user/getAllVisits`,
@@ -182,6 +210,8 @@ export const getAllBookings = async (email, token) => {
                 }
             }
         );
+        
+        console.log("Bookings response:", res.data);
         
         if (res.data && Array.isArray(res.data.bookedVisits)) {
             return res.data;
@@ -198,6 +228,7 @@ export const getAllBookings = async (email, token) => {
         // If POST fails, try with GET request as fallback
         if (error.response?.status === 404 || error.response?.status === 405) {
             try {
+                console.log("Trying GET request as fallback");
                 const fallbackRes = await api.get(
                     `/user/getAllVisits?email=${encodeURIComponent(email)}`,
                     {
@@ -206,6 +237,8 @@ export const getAllBookings = async (email, token) => {
                         }
                     }
                 );
+                
+                console.log("Fallback response:", fallbackRes.data);
                 
                 if (fallbackRes.data && Array.isArray(fallbackRes.data.bookedVisits)) {
                     return fallbackRes.data;
