@@ -12,7 +12,7 @@ export const createResidency = asyncHandler(async (req, res) => {
       facilities,
       image,
       userEmail,
-    } = req.body.data;
+    } = req.body;
 
     // Validate required fields
     if (!title || !description || !price || !address || !country || !city || !facilities || !image || !userEmail) {
