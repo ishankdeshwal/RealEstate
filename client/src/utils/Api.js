@@ -160,7 +160,7 @@ export const getAllFav = async (email, token) => {
     } catch (error) {
         console.error("Error fetching favorites:", error);
         
-        // If POST fails, try with GET request as fallback
+      
         if (error.response?.status === 404 || error.response?.status === 405) {
             try {
                 console.log("Trying GET request as fallback");
@@ -186,7 +186,7 @@ export const getAllFav = async (email, token) => {
         }
         
         if (error.response?.status === 404) {
-            toast.error("User not found. Please try logging in again.");
+            return { favResidenciesiD: [] };
         } else {
             toast.error("Something went wrong while fetching favorites");
         }
@@ -201,7 +201,7 @@ export const getAllBookings = async (email, token) => {
     
     try {
         console.log("Fetching bookings for:", email);
-        // First try with POST request
+    
         const res = await api.post(
             `/user/getAllVisits`,
             { email }, {
@@ -225,7 +225,7 @@ export const getAllBookings = async (email, token) => {
     } catch (error) {
         console.error("Error fetching bookings:", error);
         
-        // If POST fails, try with GET request as fallback
+      
         if (error.response?.status === 404 || error.response?.status === 405) {
             try {
                 console.log("Trying GET request as fallback");
@@ -251,7 +251,7 @@ export const getAllBookings = async (email, token) => {
         }
         
         if (error.response?.status === 404) {
-            toast.error("User not found. Please try logging in again.");
+            return { bookedVisits: [] };
         } else {
             toast.error("Something went wrong while fetching bookings");
         }
