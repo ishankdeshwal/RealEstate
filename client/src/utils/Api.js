@@ -266,14 +266,11 @@ export const createResidency = async (data, token) => {
             price: Number(data.price)
         };
 
-        const res = await api.post(`/residency/create`,
-            { data: formattedData },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+        const res = await api.post(`/residency/create`, formattedData, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
-        );
+        });
         return res.data;
     } catch (error) {
         if (error.response?.data?.message) {
