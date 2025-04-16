@@ -40,7 +40,7 @@ function UseFavourites() {
     }
   },[userDetails?.token])
   
-  return {data,isError,isLoading,refetch}
+  return {data: userDetails?.token ? data : null, isError, isLoading, refetch}
 }
 
 export default UseFavourites
