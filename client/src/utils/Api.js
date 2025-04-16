@@ -34,10 +34,6 @@ api.interceptors.response.use(
       toast.error("Authentication error. Please try logging in again.");
       // Clear the token to force a new login
       localStorage.removeItem("token");
-    } else if (!error.response) {
-      // Network error (no response from server)
-      console.error("Network error:", error.message);
-      toast.error("Network connection error. Please check your internet connection.");
     }
     return Promise.reject(error);
   }
@@ -50,11 +46,7 @@ export const getAllProperties=async()=>{
             throw res.data
         }return res.data
     }catch(err){
-        if (!err.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else {
-            toast.error("Error fetching properties. Please try again.");
-        }
+        toast.error("Something went Wrong")
         throw err
     }
 }
@@ -66,11 +58,7 @@ try {
         throw res.data
     }return res.data
 } catch (error) {
-    if (!error.response) {
-        toast.error("Network connection error. Please check your internet connection.");
-    } else {
-        toast.error("Error fetching property details. Please try again.");
-    }
+    toast.error('Something went wrong')
     throw error
 }
 }
@@ -83,11 +71,7 @@ export const createUser=async(email,token)=>{
         })
         return res.data;       
     } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else {
-            toast.error("Error creating user account. Please try again.");
-        }
+        toast.error('Something went wrong,Please Try Again')
         throw error
     }
 }
@@ -104,110 +88,174 @@ export const bookVisit=async(Date,PropertyId,email,token)=>{
                 }
             }
         )
-        return true
     } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else if (error.response?.data?.message) {
-            toast.error(error.response.data.message);
-        } else {
-            toast.error("Error booking visit. Please try again.");
-        }
+        toast.error('Something went wrong,Please Try Again')
         throw error
     }
 }
-export const cancelBooking=async(id,email,token)=>{
+export const removebooking=async(id,email,token)=>{
     try {
         await api.post(`/user/removeBooking/${id}`,
             {
                 email,
-                id
             },{
                 headers:{
-                    Authorization:`Bearer ${token}`
+                    Authorization:`Bearer ${token}` 
                 }
             }
         )
-        return true
     } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else if (error.response?.data?.message) {
-            toast.error(error.response.data.message);
-        } else {
-            toast.error("Error canceling booking. Please try again.");
-        }
+        toast.error('Something went wrong,Please Try Again')
         throw error
     }
 }
 export const toFav=async(id,email,token)=>{
     try {
-        await api.post(`/user/tofav/${id}`,
-            {
-                email,
-                id
-            },{
+      const res= await api.post(`/user/toFav/${id}`,
+            {email},{
                 headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            }
-        )
-        return true
-    } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else if (error.response?.data?.message) {
-            toast.error(error.response.data.message);
-        } else {
-            toast.error("Error updating favorites. Please try again.");
-        }
-        throw error
-    }
-}
-export const getAllFav=async(email,token)=>{
-    try {
-        const res=await api.post('/user/allFav',
-            {
-                email
-            },{
-                headers:{
-                    Authorization:`Bearer ${token}`
+                 Authorization:`Bearer ${token}`
                 }
             }
         )
         return res.data
     } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else if (error.response?.data?.message) {
-            toast.error(error.response.data.message);
-        } else {
-            toast.error("Error fetching favorites. Please try again.");
-        }
+     if(error.response.status===401){
+        toast.error("You must login to favorite this property.",{position:"bottom-right"})
+    }else{
+        toast.error("Something went wrong")
+     }
         throw error
     }
 }
-export const getAllBookings=async(email,token)=>{
+export const getAllFav = async (email, token) => {
+    if (!token) {
+        console.warn("No token provided to getAllFav");
+        return { favResidenciesiD: [] };
+    }
+
     try {
-        const res=await api.post('/user/getAllVisits',
-            {
-                email
-            },{
-                headers:{
-                    Authorization:`Bearer ${token}`
+        console.log("Fetching favorites for:", email);
+        // First try with POST request
+        const res = await api.post(
+            '/user/allFav',
+            { email }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
             }
-        )
-        return res.data
-    } catch (error) {
-        if (!error.response) {
-            toast.error("Network connection error. Please check your internet connection.");
-        } else if (error.response?.data?.message) {
-            toast.error(error.response.data.message);
+        );
+        
+        console.log("Favorites response:", res.data);
+        
+        if (res.data && Array.isArray(res.data.favResidenciesiD)) {
+            return res.data;
+        } else if (Array.isArray(res.data)) {
+            return { favResidenciesiD: res.data };
+        } else if (res.data && typeof res.data === 'object') {
+            return { favResidenciesiD: [] };
         } else {
-            toast.error("Error fetching bookings. Please try again.");
+            return { favResidenciesiD: [] };
         }
-        throw error
+    } catch (error) {
+        console.error("Error fetching favorites:", error);
+        
+        // If POST fails, try with GET request as fallback
+        if (error.response?.status === 404 || error.response?.status === 405) {
+            try {
+                console.log("Trying GET request as fallback");
+                const fallbackRes = await api.get(
+                    `/user/allFav?email=${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                
+                console.log("Fallback response:", fallbackRes.data);
+                
+                if (fallbackRes.data && Array.isArray(fallbackRes.data.favResidenciesiD)) {
+                    return fallbackRes.data;
+                } else if (Array.isArray(fallbackRes.data)) {
+                    return { favResidenciesiD: fallbackRes.data };
+                }
+            } catch (fallbackError) {
+                console.error("Fallback request also failed:", fallbackError);
+            }
+        }
+        
+        if (error.response?.status === 404) {
+            toast.error("User not found. Please try logging in again.");
+        } else {
+            toast.error("Something went wrong while fetching favorites");
+        }
+        return { favResidenciesiD: [] };
+    }
+}
+export const getAllBookings = async (email, token) => {
+    if (!token) {
+        console.warn("No token provided to getAllBookings");
+        return { bookedVisits: [] };
+    }
+    
+    try {
+        console.log("Fetching bookings for:", email);
+        // First try with POST request
+        const res = await api.post(
+            `/user/getAllVisits`,
+            { email }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        
+        console.log("Bookings response:", res.data);
+        
+        if (res.data && Array.isArray(res.data.bookedVisits)) {
+            return res.data;
+        } else if (Array.isArray(res.data)) {
+            return { bookedVisits: res.data };
+        } else if (res.data && typeof res.data === 'object') {
+            return { bookedVisits: [] };
+        } else {
+            return { bookedVisits: [] };
+        }
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        
+        // If POST fails, try with GET request as fallback
+        if (error.response?.status === 404 || error.response?.status === 405) {
+            try {
+                console.log("Trying GET request as fallback");
+                const fallbackRes = await api.get(
+                    `/user/getAllVisits?email=${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                
+                console.log("Fallback response:", fallbackRes.data);
+                
+                if (fallbackRes.data && Array.isArray(fallbackRes.data.bookedVisits)) {
+                    return fallbackRes.data;
+                } else if (Array.isArray(fallbackRes.data)) {
+                    return { bookedVisits: fallbackRes.data };
+                }
+            } catch (fallbackError) {
+                console.error("Fallback request also failed:", fallbackError);
+            }
+        }
+        
+        if (error.response?.status === 404) {
+            toast.error("User not found. Please try logging in again.");
+        } else {
+            toast.error("Something went wrong while fetching bookings");
+        }
+        return { bookedVisits: [] };
     }
 }
 export const createResidency = async (data, token) => {
