@@ -3,7 +3,7 @@ import UserDetailContext from '../Context/UserDetailsContext'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getAllFav } from '../utils/Api'
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-toastify'
 
 function UseFavourites() {
   const {userDetails,setUserDetails}=useContext(UserDetailContext)
