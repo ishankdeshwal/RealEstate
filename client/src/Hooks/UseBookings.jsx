@@ -25,7 +25,7 @@ function UseBookings() {
     },
     onError: (error) => {
       if (error.response?.status === 404) {
-        console.log("User not found - might be first login");
+        toast.error("User not found. Please try logging in again.");
       } else if (error.response?.status === 500) {
         toast.error("Server error while fetching bookings. Please try again later.");
       } else {
@@ -34,18 +34,14 @@ function UseBookings() {
     },
     enabled: !!user && !!userDetails?.token,
     staleTime: 30000,
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retry: 1
   })
   
   queryRef.current = refetch
   
   useEffect(() => {
     if (userDetails?.token) {
-      const timer = setTimeout(() => {
-        queryRef.current && queryRef.current()
-      }, 1000);
-      return () => clearTimeout(timer);
+      queryRef.current && queryRef.current()
     }
   }, [userDetails?.token])
   
