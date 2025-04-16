@@ -92,8 +92,8 @@ function Layout() {
     }
   }, [isAuthenticated, user, getAccessTokenSilently, setUserDetails]);
 
-  const { data: favData } = isAuthenticated && userDetails?.token ? UseFavourites() : { data: null };
-  const { data: bookingsData } = isAuthenticated && userDetails?.token ? UseBookings() : { data: null };
+  const { data: favData } = UseFavourites();
+  const { data: bookingsData } = UseBookings();
 
   useEffect(() => {
     if (isAuthenticated && userDetails?.token && favData?.favResidenciesiD) {

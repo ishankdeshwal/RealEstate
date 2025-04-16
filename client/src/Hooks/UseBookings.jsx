@@ -45,7 +45,7 @@ function UseBookings() {
     }
   }, [userDetails?.token])
   
-  return { data, isError, isLoading, error, refetch }
+  return { data: userDetails?.token ? data : null, isError, isLoading, refetch }
 }
 
 export default UseBookings
