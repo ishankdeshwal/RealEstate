@@ -25,7 +25,7 @@ function UseBookings() {
     },
     onError: (error) => {
       if (error.response?.status === 404) {
-        toast.error("User not found. Please try logging in again.");
+        return;
       } else if (error.response?.status === 500) {
         toast.error("Server error while fetching bookings. Please try again later.");
       } else {
