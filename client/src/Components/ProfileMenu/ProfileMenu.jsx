@@ -20,6 +20,7 @@ function ProfileMenu({ user, logout }) {
         
         </Menu.Target>
         <Menu.Dropdown>
+          <Menu.Item onClick={() => navigate("/my-properties")}>My Properties</Menu.Item>
           <Menu.Item onClick={() => navigate("/bookings")}>Bookings</Menu.Item>
           <Menu.Item onClick={() => navigate("/favourites")}>Favourites</Menu.Item>
           <Menu.Item onClick={() => {
