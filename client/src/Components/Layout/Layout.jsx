@@ -92,27 +92,26 @@ function Layout() {
     }
   }, [isAuthenticated, user, getAccessTokenSilently, setUserDetails]);
 
-  const { data: favData } = UseFavourites();
-
-  const { data: bookingsData } = UseBookings();
+  const { data: favData } = isAuthenticated && userDetails?.token ? UseFavourites() : { data: null };
+  const { data: bookingsData } = isAuthenticated && userDetails?.token ? UseBookings() : { data: null };
 
   useEffect(() => {
-    if (favData?.favResidenciesiD) {
+    if (isAuthenticated && userDetails?.token && favData?.favResidenciesiD) {
       setUserDetails((prev) => ({
         ...prev,
         favourites: favData.favResidenciesiD,
       }))
     }
-  }, [favData])
+  }, [favData, isAuthenticated, userDetails?.token])
 
   useEffect(() => {
-    if (bookingsData?.bookedVisits) {
+    if (isAuthenticated && userDetails?.token && bookingsData?.bookedVisits) {
       setUserDetails((prev) => ({
         ...prev,
         bookings: bookingsData.bookedVisits,
       }))
     }
-  }, [bookingsData])
+  }, [bookingsData, isAuthenticated, userDetails?.token])
 
   return (
     <>
