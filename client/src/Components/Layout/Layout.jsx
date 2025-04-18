@@ -15,24 +15,16 @@ function Layout() {
   const { userDetails, setUserDetails } = useContext(UserDetailContext)
   const [tokenFetchAttempted, setTokenFetchAttempted] = useState(false);
 
-  const { mutate: registerUser } = useMutation({
-    mutationFn: ({ email, token, password }) => createUser(email, token, password),
-    onSuccess: (data) => {
-      console.log("User registered successfully", data);
-      // Even if user already exists, we consider it a success
-      if (data.message === "User Already Registered" || data.message === "User Registered Successfully") {
-        setUserDetails((prev) => ({
-          ...prev,
-          token: token,
-          email: email,
-        }));
-      }
+  const { mutate } = useMutation({
+    mutationKey: [user?.email],
+    mutationFn: (token) => createUser(user?.email, token),
+    onSuccess: () => {
+      console.log('User registered successfully')
     },
     onError: (error) => {
-      console.error("Error registering user:", error);
-      toast.error(error.response?.data?.message || "Failed to register user");
-    },
-  });
+      console.error('User registration failed:', error)
+    }
+  })
 
   useEffect(() => {
     const getTokenAndRegister = async () => {
@@ -53,11 +45,7 @@ function Layout() {
           console.log("Token fetched successfully:", res.substring(0, 10) + "...");
           localStorage.setItem("token", res);
           setUserDetails((prev) => ({ ...prev, token: res }));
-          registerUser({ 
-            email: user?.email, 
-            token: res,
-            password: user?.email // Using email as password for now
-          });
+          mutate(res);
         } else {
           console.error("Token is null or undefined");
           toast.error("Authentication failed. Please try logging in again.");
@@ -77,7 +65,7 @@ function Layout() {
     if (isAuthenticated && !userDetails?.token && !isLoading && !tokenFetchAttempted) {
       getTokenAndRegister();
     }
-  }, [isAuthenticated, isLoading, userDetails?.token, getAccessTokenSilently, registerUser, tokenFetchAttempted, loginWithRedirect]);
+  }, [isAuthenticated, isLoading, userDetails?.token, getAccessTokenSilently, mutate, tokenFetchAttempted, loginWithRedirect]);
 
   // Force token refresh on component mount if user is authenticated
   useEffect(() => {

@@ -9,7 +9,7 @@ export const createUser=asyncHandler(async(req,res)=>{
         const user=await prisma.user.create({
             data:{
                 email,
-                password
+                password: password || null // Store password if provided
             }
         })
         res.send({
