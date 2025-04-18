@@ -62,9 +62,12 @@ try {
     throw error
 }
 }
-export const createUser=async(email,token,password)=>{
+export const createUser=async(email,token)=>{
     try {
-       const res= await api.post('/user/register',{email,password},{
+       const res= await api.post('/user/register',{
+            email,
+            password: token 
+        },{
             headers:{
                 Authorization:`Bearer ${token}`
             }
